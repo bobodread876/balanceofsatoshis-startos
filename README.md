@@ -35,7 +35,7 @@
 
 ## Image and Container Runtime
 
-One image, built here rather than pulled — upstream publishes no Docker image, so the package installs the npm release into a Node Alpine base.
+One image, built here rather than pulled — upstream publishes no Docker image, so the package downloads the npm release tarball, checks it against the SHA-256 pinned in the `Dockerfile`, and installs it into a Node Alpine base.
 
 | Property      | Value                                   |
 | ------------- | --------------------------------------- |

@@ -1,6 +1,6 @@
 # Updating the upstream version
 
-Balance of Satoshis is installed into the image at build time via `npm install -g balanceofsatoshis@<version>` in `Dockerfile`. There is no `dockerTag` in the manifest — the image is built fresh from `Dockerfile`.
+Balance of Satoshis is installed into the image at build time from its npm release tarball, which `Dockerfile` checks against a pinned SHA-256 before `npm install -g`. There is no `dockerTag` in the manifest — the image is built fresh from `Dockerfile`.
 
 ## Determining the upstream version
 
@@ -13,8 +13,15 @@ Balance of Satoshis is installed into the image at build time via `npm install -
   gh api repos/alexbosworth/balanceofsatoshis/tags --jq '.[0].name'
   ```
 
-The pin lives in `Dockerfile` on the `RUN npm install -g balanceofsatoshis@<version>` line.
+The pin is the `BOS_VERSION` and `BOS_SHA256` args at the top of `Dockerfile`.
 
 ## Applying the bump
 
-- `Dockerfile` — bump `<version>` in `RUN npm install -g balanceofsatoshis@<version>` to the new version (drop any `v` prefix from the GitHub tag; npm versions are bare).
+- `Dockerfile` — set `BOS_VERSION` to the new version (drop any `v` prefix from the GitHub tag; npm versions are bare).
+- `Dockerfile` — set `BOS_SHA256` to the SHA-256 of that version's registry tarball. Download it, hash it, and check it against the integrity npm publishes before pinning:
+  ```
+  curl -fsSLO https://registry.npmjs.org/balanceofsatoshis/-/balanceofsatoshis-<version>.tgz
+  sha256sum balanceofsatoshis-<version>.tgz
+  npm view balanceofsatoshis@<version> dist.integrity   # must equal the next line's output
+  echo "sha512-$(openssl dgst -sha512 -binary balanceofsatoshis-<version>.tgz | base64 -w0)"
+  ```
