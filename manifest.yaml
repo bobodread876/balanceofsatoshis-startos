@@ -2,6 +2,7 @@ id: balanceofsatoshis
 title: "Balance of Satoshis"
 version: 26.2.1
 release-notes: |
+  * Before stopping BOS or updating LND, finish or recover any pending swaps started with `bos swap-in` or `bos increase-inbound-liquidity`. BOS 26.2.1 cannot read their old recovery codes. Upstream specifies BOS 25.7.0 for refunding older swap-ins.
   * Update Balance of Satoshis to 26.2.1 and use Node.js 24.
   * Requires LND 0.20.0–0.20.8 or 0.21.0–0.21.8. Existing saved nodes and settings carry over.
 license: mit
