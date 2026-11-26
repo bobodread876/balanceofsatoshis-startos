@@ -17,3 +17,15 @@ Please note: for EOS v0.3.1 and above the default ssh user has changed from "roo
 **You should now be able to run Balance of Satoshis commands.**
 
 ## Run the command `bos help` for more information.
+
+## Upgrading to 26.2.1
+
+Updates from Marketplace 18.2.9 and Community Beta 19.5.5 retain the BOS
+settings and saved nodes under `/root/.bos`. The GitHub release tagged
+`v19.5.0` also appears as 19.5.5 in StartOS.
+
+Back up BOS and stop it before updating. The older packages require an older
+LND version. With BOS stopped, update LND to a supported release
+(0.20.0–0.20.8 or 0.21.0–0.21.8), then update BOS. Start BOS once LND is
+running and unlocked. Check the installed version with `bos --version` and
+confirm that `bos peers` connects to the node.
