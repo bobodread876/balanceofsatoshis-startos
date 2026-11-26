@@ -71,7 +71,7 @@ Mounting `main` at `/root` is what makes BoS's own conventions work unchanged: e
 | `.bos/telegram_bot_api_key`     | The Telegram bot token — package-managed, read by BoS |
 | `.startos/store.json`           | Package state: Telegram connect code and on/off flag  |
 
-The saved node is named `embassy`, kept from the 0.3.5.1 package so existing backups and users' own command snippets keep working.
+The saved node keeps its original name, `embassy`, so existing backups and command snippets continue to work.
 
 ## File Models
 
@@ -115,7 +115,7 @@ The dependency is declared `kind: 'running'`, so StartOS reports it unmet unless
 
 **None.** `setInterfaces` returns an empty array: the package binds no port and publishes no address, on LAN, Tor, or clearnet.
 
-The StartOS 0.3.5 package declared a `main` interface. Updating to `23.1.6:1` or later retires that leftover `main` host in the version migration, freeing its port; nothing is moved anywhere, since there is no interface to move it to.
+When upgrading a legacy installation, the package migration retires the old `main` host and frees its port.
 
 Traffic still leaves the container in two directions — gRPC to LND over the private bridge, and, if the bot is configured, outbound HTTPS to Telegram's API. Neither is an inbound interface, so there is nothing to expose or to secure at the network layer.
 
