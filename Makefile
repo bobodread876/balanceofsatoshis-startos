@@ -33,14 +33,14 @@ clean:
 scripts/embassy.js: $(TS_FILES)
 	deno run --allow-read --allow-write --allow-env --allow-net scripts/bundle.ts
 
-docker-images/x86_64.tar: Dockerfile docker_entrypoint.sh
+docker-images/x86_64.tar: manifest.yaml Dockerfile docker_entrypoint.sh check-cmd.sh credentials.json
 ifeq ($(ARCH),aarch64)
 else
 	mkdir -p docker-images
 	docker buildx build --tag start9/$(PKG_ID)/main:$(PKG_VERSION) --platform=linux/amd64 -o type=docker,dest=docker-images/x86_64.tar .
 endif
 
-docker-images/aarch64.tar: Dockerfile docker_entrypoint.sh
+docker-images/aarch64.tar: manifest.yaml Dockerfile docker_entrypoint.sh check-cmd.sh credentials.json
 ifeq ($(ARCH),x86_64)
 else
 	mkdir -p docker-images

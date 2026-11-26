@@ -1,20 +1,15 @@
 #!/bin/bash
-
-set -a
-
-# Display current installed version and help
-echo "Balance of Satoshis - Version: "
+set -eu
 bos --version
-echo "Configuring Balance of Satoshis..."
+
+# Preserve a saved node if the operator has customized its credentials.
+umask 077
 mkdir -p /root/.bos/embassy
-chmod -R a+x /root/.bos
-mv /credentials.json /root/.bos/embassy/credentials.json
-chmod a+x /root/.bos/embassy/credentials.json
+if [[ ! -e /root/.bos/embassy/credentials.json ]]; then
+    cp /credentials.json /root/.bos/embassy/credentials.json
+fi
 
-echo "Checking for peers..."
-
-# Starting command line
-while true;
-do bos peers;
-sleep 20000;
+while true; do
+    bos peers || echo "Waiting for LND to respond" >&2
+    sleep 20000
 done
